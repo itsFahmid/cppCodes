@@ -6,27 +6,32 @@ int main() {
     cin >> q;
 
     map<long long, long long> mp;
-    vector<int> x;
+    vector<long long> x;
 
     while(q--) {
         int type;
         cin >> type;
 
         if(type == 1){
-            int a, b;
+            long long a, b;
             cin >> a >> b;
-            if(mp[a] < b){
-                mp[a] = b;
-            }
+            mp[a] = max(mp[a], b);
         }
         else if(type == 2){
-            int t;
+            long long t;
             cin >> t;
             x.push_back(t);
         }
     }
-    for(it : x){
-        if(x )
+    for(auto it : x){
+        pair <long long, long long> res = {-1, -1};
+        for(auto m : mp){
+            if(m.first <= it){
+                res.first = m.first;
+                res.second = m.second;
+            }
+        }
+        cout << res.first << " " << res.second << endl;
     }
 }
 
