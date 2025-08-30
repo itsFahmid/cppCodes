@@ -19,3 +19,15 @@ int main()
     cout << ans << endl;
     return 0;
 }
+
+/*
+If we do not place the queen on the last row and the last column then the answer will simply be the number of positions to place in a chessboard of (N-1) * (N-1)
+whereas if we place in the last column and last row then possible positions for queens will be 2N−1
+and attacking at 3(N−1)
+positions. Therefore, the possible positions for the other queen for each position of the queen will be −3(N−1)−1.
+Finally, there are (N−1)(N−2)
+combinations where both queens are on the last row and last column. Therefore, the recurrence relation will be:
+Q(N)=Q(N−1)+(2N−1)[N^2−3(N−1)−1]−(N−1)(N−2)// By Induction
+
+Collected from Geek-for-Geek
+*/
