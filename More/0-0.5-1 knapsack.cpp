@@ -44,15 +44,19 @@ void greedyKnapsack(int m, vector<Item>& items, int n) {
     for (int i = 0; i < n; ++i) {
         // If we can't fit any more items, break.
         // Corresponds to 'if (w[i] > U) then break;'.
-        if (items[i].weight > U) {
+        if ( (items[i].weight > U ) ) {
             // Take a fraction of the current item to fill the remaining capacity.
-
-
             // Corresponds to 'if (i <= n) then x[i] = U/w[i];'.
-            x[items[i].index] = (double)U / items[i].weight;
-            totalProfit += U * ((double)items[i].profit / items[i].weight);
-            U = 0; // Knapsack is now full
-            break;
+            if(items[i].weight / 2 < U){
+                x[items[i].index] = 0.5;
+                totalProfit += U * ((double)items[i].profit / (items[i].weight / 2) );
+                U -= items[i].weight / 2; // Knapsack is now full
+                break;
+            }
+            else{
+                break;
+            }
+
         }
 
         // If the item fits completely, take all of it.
@@ -70,6 +74,7 @@ void greedyKnapsack(int m, vector<Item>& items, int n) {
             cout << "  Item " << i + 1 << ": " << fixed << setprecision(2) << x[i] * 100 << "%" << endl;
         }
     }
+    cout << "Empty Space: " << U << endl;
 }
 
 int main() {
