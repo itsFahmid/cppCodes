@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+/*
 int minCoinsRecur(int i, int sum, vector<int> &coins) {
 
     // base case
@@ -38,5 +39,50 @@ int main() {
     int x;
     cin >> x;
     cout << minCoins(coins, x);
+    return 0;
+}
+*/
+
+#include <bits/stdc++.h>
+using namespace std;
+
+#define INF INT_MAX
+
+int solveRec(int x, vector<int> &coins, vector<bool> &ready, vector<int> &value){
+    if (x < 0) return INF;
+    if (x == 0) return 0;
+    if (ready[x]) return value[x];
+
+    int best = INF;
+    for (auto c : coins) {
+        int res = solveRec(x - c, coins, ready, value);
+        if (res != INF) best = min(best, res + 1); // avoid overflow
+    }
+    ready[x] = true;
+    value[x] = best;
+    return best;
+}
+
+int main(){
+    int n;
+    cout << "Enter the total number of coins: ";
+    cin >> n;
+
+    cout << "Enter the coins: ";
+    vector<int> coins(n);
+    for (int i = 0; i < n; i++) cin >> coins[i];
+
+    cout << "Enter the total value to be produced: ";
+    int x;
+    cin >> x;
+
+    vector<int> value(x + 1, INF);
+    vector<bool> ready(x + 1, false);
+
+    int ans = solveRec(x, coins, ready, value);
+
+    if (ans == INF) cout << "Not possible\n";
+    else cout << "Minimum coins: " << ans << "\n";
+
     return 0;
 }
