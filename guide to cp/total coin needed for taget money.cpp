@@ -48,12 +48,15 @@ using namespace std;
 
 #define INF INT_MAX
 
-int solveIter(int x, vector<int> &coins, vector<int> &value){
+int solveIter(int x, vector<int> &coins, vector<int> &value, vector<int> &first){   // first is the array that will save which coins will be taken for the solution.
     value[0] = 0;
-    for(int i = 1; i <= x; i++){
-        for(auto c : coins){
-            if(i - c  >= 0){
-                value[i] = min(value[i], value[i - c] + 1);
+    for(int i = 1; i <= x; i++) {
+        for(auto c : coins) {
+            if(i - c >= 0 && value[i - c] != INF) {
+                if(value[i - c] + 1 < value[i]) {
+                    value[i] = value[i - c] + 1;
+                    first[i] = c;  // store which coin was last used to reach i
+                }
             }
         }
     }
@@ -61,14 +64,14 @@ int solveIter(int x, vector<int> &coins, vector<int> &value){
 }
 
 int solveRec(int x, vector<int> &coins, vector<bool> &ready, vector<int> &value){
-    if (x < 0) return INF;
-    if (x == 0) return 0;
-    if (ready[x]) return value[x];
+    if(x < 0) return INF;
+    if(x == 0) return 0;
+    if(ready[x]) return value[x];
 
     int best = INF;
-    for (auto c : coins) {
+    for(auto c : coins) {
         int res = solveRec(x - c, coins, ready, value);
-        if (res != INF) best = min(best, res + 1); // avoid overflow
+        if (res != INF) best = min(best, res + 1);
     }
     ready[x] = true;
     value[x] = best;
@@ -82,7 +85,7 @@ int main(){
 
     cout << "Enter the coins: ";
     vector<int> coins(n);
-    for (int i = 0; i < n; i++) cin >> coins[i];
+    for(int i = 0; i < n; i++) cin >> coins[i];
 
     cout << "Enter the total value to be produced: ";
     int x;
@@ -92,15 +95,27 @@ int main(){
     vector<bool> ready(x + 1, false);
 
     int ans = solveRec(x, coins, ready, value);
-    int aans = solveIter(x, coins, value);
 
-    cout << "recursive: " << endl;
-    if (ans == INF) cout << "Not possible\n";
+    vector<int> value2(x + 1, INF), first(x + 1, -1);
+    int aans = solveIter(x, coins, value2, first);
+
+    cout << "Recursive:\n";
+    if(ans == INF) cout << "Not possible\n";
     else cout << "Minimum coins: " << ans << "\n";
 
-    cout << "Iterative: " << endl;
-    if (aans == INF) cout << "Not possible\n";
-    else cout << "Minimum coins: " << aans << "\n";
-
+    cout << "Iterative:\n";
+    if(aans == INF){
+        cout << "Not possible\n";
+    }
+    else{
+        cout << "Minimum coins: " << aans << "\n";
+        cout << "Coins used: ";
+        int cur = x;
+        while (cur > 0){
+            cout << first[cur] << " ";
+            cur -= first[cur];
+        }
+        cout << "\n";
+    }
     return 0;
 }
