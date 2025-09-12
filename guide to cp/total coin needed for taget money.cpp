@@ -48,6 +48,18 @@ using namespace std;
 
 #define INF INT_MAX
 
+int solveIter(int x, vector<int> &coins, vector<int> &value){
+    value[0] = 0;
+    for(int i = 1; i <= x; i++){
+        for(auto c : coins){
+            if(i - c  >= 0){
+                value[i] = min(value[i], value[i - c] + 1);
+            }
+        }
+    }
+    return value[x];
+}
+
 int solveRec(int x, vector<int> &coins, vector<bool> &ready, vector<int> &value){
     if (x < 0) return INF;
     if (x == 0) return 0;
@@ -80,9 +92,15 @@ int main(){
     vector<bool> ready(x + 1, false);
 
     int ans = solveRec(x, coins, ready, value);
+    int aans = solveIter(x, coins, value);
 
+    cout << "recursive: " << endl;
     if (ans == INF) cout << "Not possible\n";
     else cout << "Minimum coins: " << ans << "\n";
+
+    cout << "Iterative: " << endl;
+    if (aans == INF) cout << "Not possible\n";
+    else cout << "Minimum coins: " << aans << "\n";
 
     return 0;
 }
