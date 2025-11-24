@@ -9,9 +9,9 @@ int worse(int arr[], int n){    // this computes O(n^3) time complexity
         for (int b = a; b < n; b++) {
         int sum = 0;
             for (int k = a; k <= b; k++) {
-            sum += arr[k];
+                sum += arr[k];
             }
-        best = max(best,sum);
+            best = max(best,sum);
         }
     }
     return best;
@@ -26,7 +26,7 @@ int barely_works(int arr[], int n){     //this computes O(n^2) time complexity. 
             best = max(best,sum);
         }
     }
-    return n;
+    return best;
 }
 
 int main(){
